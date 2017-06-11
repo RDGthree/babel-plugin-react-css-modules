@@ -1,5 +1,5 @@
 coverage
-dist
+yarn.lock
 node_modules
 *.log
 .*
