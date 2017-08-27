@@ -4,6 +4,9 @@
     "context": {
       "type": "string"
     },
+    "resolve": {
+      "type": "string"
+    },
     "exclude": {
       "type": "string"
     },

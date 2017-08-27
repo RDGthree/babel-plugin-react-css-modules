@@ -12,9 +12,17 @@ var _conditionalClassMerge = require('./conditionalClassMerge');
 
 var _conditionalClassMerge2 = _interopRequireDefault(_conditionalClassMerge);
 
+var _createObjectExpression = require('./createObjectExpression');
+
+var _createObjectExpression2 = _interopRequireDefault(_createObjectExpression);
+
+var _optionsDefaults = require('./schemas/optionsDefaults');
+
+var _optionsDefaults2 = _interopRequireDefault(_optionsDefaults);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = (t, path, styleNameAttribute, importedHelperIndentifier, styleModuleImportMapIdentifier) => {
+exports.default = (t, path, styleNameAttribute, importedHelperIndentifier, styleModuleImportMapIdentifier, options) => {
   const expressionContainerValue = styleNameAttribute.value;
   const classNameAttribute = path.node.openingElement.attributes.find(attribute => {
     return typeof attribute.name !== 'undefined' && attribute.name.name === 'className';
@@ -26,7 +34,15 @@ exports.default = (t, path, styleNameAttribute, importedHelperIndentifier, style
 
   path.node.openingElement.attributes.splice(path.node.openingElement.attributes.indexOf(styleNameAttribute), 1);
 
-  const styleNameExpression = t.callExpression(importedHelperIndentifier, [expressionContainerValue.expression, styleModuleImportMapIdentifier]);
+  const args = [expressionContainerValue.expression, styleModuleImportMapIdentifier];
+
+  // Only provide options argument if the options are something other than default
+  // This helps save a few bits in the generated user code
+  if (options.handleMissingStyleName !== _optionsDefaults2.default.handleMissingStyleName) {
+    args.push((0, _createObjectExpression2.default)(t, options));
+  }
+
+  const styleNameExpression = t.callExpression(importedHelperIndentifier, args);
 
   if (classNameAttribute) {
     if ((0, _babelTypes.isStringLiteral)(classNameAttribute.value)) {

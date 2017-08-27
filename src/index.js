@@ -176,7 +176,8 @@ export default ({
         filenameMap[filename].styleModuleImportMap[styleImportName] = requireCssModule(targetResourcePath, {
           context: stats.opts.context,
           filetypes: stats.opts.filetypes || {},
-          generateScopedName: stats.opts.generateScopedName
+          generateScopedName: stats.opts.generateScopedName,
+          resolve: stats.opts.resolve,
         });
 
         if (stats.opts.webpackHotModuleReloading) {

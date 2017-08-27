@@ -14,6 +14,10 @@ var _babelTypes = require('babel-types');
 
 var _babelTypes2 = _interopRequireDefault(_babelTypes);
 
+var _ajvKeywords = require('ajv-keywords');
+
+var _ajvKeywords2 = _interopRequireDefault(_ajvKeywords);
+
 var _ajv = require('ajv');
 
 var _ajv2 = _interopRequireDefault(_ajv);
@@ -21,6 +25,10 @@ var _ajv2 = _interopRequireDefault(_ajv);
 var _optionsSchema = require('./schemas/optionsSchema.json');
 
 var _optionsSchema2 = _interopRequireDefault(_optionsSchema);
+
+var _optionsDefaults = require('./schemas/optionsDefaults');
+
+var _optionsDefaults2 = _interopRequireDefault(_optionsDefaults);
 
 var _createObjectExpression = require('./createObjectExpression');
 
@@ -40,7 +48,12 @@ var _replaceJsxExpressionContainer2 = _interopRequireDefault(_replaceJsxExpressi
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const ajv = new _ajv2.default();
+const ajv = new _ajv2.default({
+  // eslint-disable-next-line id-match
+  $data: true
+});
+
+(0, _ajvKeywords2.default)(ajv);
 
 const validate = ajv.compile(_optionsSchema2.default);
 
@@ -129,8 +142,8 @@ exports.default = (_ref) => {
         let styleImportName;
 
         if (path.node.specifiers.length === 0) {
-          // eslint-disable-next-line no-process-env
-          styleImportName = process.env.NODE_ENV === 'test' ? 'random-test' : 'random-' + Math.random();
+          // use imported file path as import name
+          styleImportName = path.node.source.value;
         } else if (path.node.specifiers.length === 1) {
           styleImportName = path.node.specifiers[0].local.name;
         } else {
@@ -143,7 +156,8 @@ exports.default = (_ref) => {
         filenameMap[filename].styleModuleImportMap[styleImportName] = (0, _requireCssModule2.default)(targetResourcePath, {
           context: stats.opts.context,
           filetypes: stats.opts.filetypes || {},
-          generateScopedName: stats.opts.generateScopedName
+          generateScopedName: stats.opts.generateScopedName,
+          resolve: stats.opts.resolve
         });
 
         if (stats.opts.webpackHotModuleReloading) {
@@ -164,8 +178,12 @@ exports.default = (_ref) => {
           return;
         }
 
+        const handleMissingStyleName = stats.opts && stats.opts.handleMissingStyleName || _optionsDefaults2.default.handleMissingStyleName;
+
         if (t.isStringLiteral(styleNameAttribute.value)) {
-          (0, _resolveStringLiteral2.default)(path, filenameMap[filename].styleModuleImportMap, styleNameAttribute);
+          (0, _resolveStringLiteral2.default)(path, filenameMap[filename].styleModuleImportMap, styleNameAttribute, {
+            handleMissingStyleName
+          });
 
           return;
         }
@@ -174,7 +192,9 @@ exports.default = (_ref) => {
           if (!filenameMap[filename].importedHelperIndentifier) {
             setupFileForRuntimeResolution(path, filename);
           }
-          (0, _replaceJsxExpressionContainer2.default)(t, path, styleNameAttribute, filenameMap[filename].importedHelperIndentifier, filenameMap[filename].styleModuleImportMapIdentifier);
+          (0, _replaceJsxExpressionContainer2.default)(t, path, styleNameAttribute, filenameMap[filename].importedHelperIndentifier, filenameMap[filename].styleModuleImportMapIdentifier, {
+            handleMissingStyleName
+          });
         }
       },
       Program(path, stats) {

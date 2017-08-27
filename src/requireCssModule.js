@@ -33,7 +33,8 @@ type FiletypesConfigurationType = {
 type OptionsType = {|
   filetypes: FiletypesConfigurationType,
   generateScopedName?: GenerateScopedNameConfigurationType,
-  context?: string
+  context?: string,
+  resolve?: string
 |};
 
 const getFiletypeOptions = (cssSourceFilePath: string, filetypes: FiletypesConfigurationType): ?FiletypeOptionsType => {
@@ -72,7 +73,8 @@ const getExtraPlugins = (filetypeOptions: ?FiletypeOptionsType): $ReadOnlyArray<
   });
 };
 
-const getTokens = (runner, cssSourceFilePath: string, filetypeOptions: ?FiletypeOptionsType): StyleModuleMapType => {
+const getTokens = (runner, cssSourceFilePath: string, filetypeOptions: ?FiletypeOptionsType, context: string, resolvePath: string): StyleModuleMapType => {
+  const extension = cssSourceFilePath.substr(cssSourceFilePath.lastIndexOf('.'));
   // eslint-disable-next-line flowtype/no-weak-types
   const options: Object = {
     from: cssSourceFilePath
@@ -85,7 +87,10 @@ const getTokens = (runner, cssSourceFilePath: string, filetypeOptions: ?Filetype
   let fileContents = '';
 
   if (extension === '.scss') {
-    fileContents = sass.renderSync({file: cssSourceFilePath});
+    fileContents = sass.renderSync({
+      file: cssSourceFilePath,
+      includePaths: [context + '/' + resolvePath]
+    });
     fileContents = fileContents.css.toString();
   } else {
     fileContents = readFileSync(cssSourceFilePath, 'utf-8');
@@ -124,7 +129,7 @@ export default (cssSourceFilePath: string, options: OptionsType): StyleModuleMap
     const fromDirectoryPath = dirname(from);
     const toPath = resolve(fromDirectoryPath, to);
 
-    return getTokens(runner, toPath, filetypeOptions);
+    return getTokens(runner, toPath, filetypeOptions, options.context, options.resolve);
   };
 
   const extraPlugins = getExtraPlugins(filetypeOptions);
@@ -144,5 +149,5 @@ export default (cssSourceFilePath: string, options: OptionsType): StyleModuleMap
 
   runner = postcss(plugins);
 
-  return getTokens(runner, cssSourceFilePath, filetypeOptions);
+  return getTokens(runner, cssSourceFilePath, filetypeOptions, options.context, options.resolve);
 };

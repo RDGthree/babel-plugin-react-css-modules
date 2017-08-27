@@ -4,6 +4,9 @@
     "context": {
       "type": "string"
     },
+    "resolve": {
+      "type": "string"
+    },
     "exclude": {
       "type": "string"
     },
@@ -11,19 +14,41 @@
       "additionalProperties": false,
       "patternProperties": {
         "\\..*": {
-          "type": "string"
+          "additionalProperties": false,
+          "properties": {
+            "plugins": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "syntax": {
+              "type": "string"
+            }
+          },
+          "type": "object"
         }
       },
       "type": "object"
     },
     "generateScopedName": {
-      "type": "string"
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "typeof": "function"
+        }
+      ]
     },
     "removeImport": {
       "type": "boolean"
     },
     "webpackHotModuleReloading": {
       "type": "boolean"
+    },
+    "handleMissingStyleName": {
+      "enum": ["throw", "warn", "ignore"]
     }
   },
   "type": "object"

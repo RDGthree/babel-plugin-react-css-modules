@@ -19,12 +19,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * Updates the className value of a JSX element using a provided styleName attribute.
  */
-exports.default = (path, styleModuleImportMap, styleNameAttribute) => {
+exports.default = (path, styleModuleImportMap, styleNameAttribute, options) => {
   const classNameAttribute = path.node.openingElement.attributes.find(attribute => {
     return typeof attribute.name !== 'undefined' && attribute.name.name === 'className';
   });
 
-  const resolvedStyleName = (0, _getClassName2.default)(styleNameAttribute.value.value, styleModuleImportMap);
+  const resolvedStyleName = (0, _getClassName2.default)(styleNameAttribute.value.value, styleModuleImportMap, options);
 
   if (classNameAttribute) {
     if ((0, _babelTypes.isStringLiteral)(classNameAttribute.value)) {
