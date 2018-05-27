@@ -4,8 +4,8 @@
     "context": {
       "type": "string"
     },
-    "resolve": {
-      "type": "string"
+    "includePaths": {
+      "type": "array"
     },
     "exclude": {
       "type": "string"

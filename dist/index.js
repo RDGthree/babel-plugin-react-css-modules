@@ -157,7 +157,7 @@ exports.default = (_ref) => {
           context: stats.opts.context,
           filetypes: stats.opts.filetypes || {},
           generateScopedName: stats.opts.generateScopedName,
-          resolve: stats.opts.resolve
+          includePaths: stats.opts.includePaths
         });
 
         if (stats.opts.webpackHotModuleReloading) {

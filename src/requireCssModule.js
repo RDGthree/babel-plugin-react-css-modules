@@ -31,10 +31,10 @@ type FiletypesConfigurationType = {
 };
 
 type OptionsType = {|
+  context?: string,
   filetypes: FiletypesConfigurationType,
   generateScopedName?: GenerateScopedNameConfigurationType,
-  context?: string,
-  resolve?: string
+  includePaths?: $ReadOnlyArray
 |};
 
 const getFiletypeOptions = (cssSourceFilePath: string, filetypes: FiletypesConfigurationType): ?FiletypeOptionsType => {
@@ -73,7 +73,7 @@ const getExtraPlugins = (filetypeOptions: ?FiletypeOptionsType): $ReadOnlyArray<
   });
 };
 
-const getTokens = (runner, cssSourceFilePath: string, filetypeOptions: ?FiletypeOptionsType, context: string, resolvePath: string): StyleModuleMapType => {
+const getTokens = (runner, cssSourceFilePath: string, filetypeOptions: ?FiletypeOptionsType, includePaths?: Array<string>): StyleModuleMapType => {
   const extension = cssSourceFilePath.substr(cssSourceFilePath.lastIndexOf('.'));
   // eslint-disable-next-line flowtype/no-weak-types
   const options: Object = {
@@ -89,7 +89,7 @@ const getTokens = (runner, cssSourceFilePath: string, filetypeOptions: ?Filetype
   if (extension === '.scss') {
     fileContents = sass.renderSync({
       file: cssSourceFilePath,
-      includePaths: [context + '/' + resolvePath]
+      includePaths
     });
     fileContents = fileContents.css.toString();
   } else {
@@ -129,7 +129,7 @@ export default (cssSourceFilePath: string, options: OptionsType): StyleModuleMap
     const fromDirectoryPath = dirname(from);
     const toPath = resolve(fromDirectoryPath, to);
 
-    return getTokens(runner, toPath, filetypeOptions, options.context, options.resolve);
+    return getTokens(runner, toPath, filetypeOptions, options.includePaths);
   };
 
   const extraPlugins = getExtraPlugins(filetypeOptions);
@@ -149,5 +149,5 @@ export default (cssSourceFilePath: string, options: OptionsType): StyleModuleMap
 
   runner = postcss(plugins);
 
-  return getTokens(runner, cssSourceFilePath, filetypeOptions, options.context, options.resolve);
+  return getTokens(runner, cssSourceFilePath, filetypeOptions, options.includePaths);
 };

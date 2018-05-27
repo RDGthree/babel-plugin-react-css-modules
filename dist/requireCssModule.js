@@ -71,7 +71,7 @@ const getExtraPlugins = filetypeOptions => {
   });
 };
 
-const getTokens = (runner, cssSourceFilePath, filetypeOptions, context, resolve) => {
+const getTokens = (runner, cssSourceFilePath, filetypeOptions, includePaths) => {
   const extension = cssSourceFilePath.substr(cssSourceFilePath.lastIndexOf('.'));
   // eslint-disable-next-line flowtype/no-weak-types
   const options = {
@@ -87,7 +87,7 @@ const getTokens = (runner, cssSourceFilePath, filetypeOptions, context, resolve)
   if (extension === '.scss') {
     fileContents = _nodeSass2.default.renderSync({
       file: cssSourceFilePath,
-      includePaths: [`${context}/${resolve}`]
+      includePaths
     });
     fileContents = fileContents.css.toString();
   } else {
@@ -124,7 +124,7 @@ exports.default = (cssSourceFilePath, options) => {
     const fromDirectoryPath = (0, _path.dirname)(from);
     const toPath = (0, _path.resolve)(fromDirectoryPath, to);
 
-    return getTokens(runner, toPath, filetypeOptions, options.context, options.resolve);
+    return getTokens(runner, toPath, filetypeOptions, options.includePaths);
   };
 
   const extraPlugins = getExtraPlugins(filetypeOptions);
@@ -137,6 +137,6 @@ exports.default = (cssSourceFilePath, options) => {
 
   runner = (0, _postcss2.default)(plugins);
 
-  return getTokens(runner, cssSourceFilePath, filetypeOptions, options.context, options.resolve);
+  return getTokens(runner, cssSourceFilePath, filetypeOptions, options.includePaths);
 };
 //# sourceMappingURL=requireCssModule.js.map
