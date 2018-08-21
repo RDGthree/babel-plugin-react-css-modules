@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
+exports.default = void 0;
 
 var isNamespacedStyleName = function isNamespacedStyleName(styleName) {
   return styleName.indexOf('.') !== -1;
@@ -54,11 +54,9 @@ var getClassNameForNamespacedStyleName = function getClassNameForNamespacedStyle
   return styleModuleImportMap[importName][moduleName];
 };
 
-exports.default = function (styleNameValue, styleModuleImportMap, options) {
+var _default = function _default(styleNameValue, styleModuleImportMap, options) {
   var styleModuleImportMapKeys = Object.keys(styleModuleImportMap);
-
   var handleMissingStyleName = options && options.handleMissingStyleName;
-
   return styleNameValue.split(' ').filter(function (styleName) {
     return styleName;
   }).map(function (styleName) {
@@ -80,6 +78,7 @@ exports.default = function (styleNameValue, styleModuleImportMap, options) {
       if (handleMissingStyleName === 'throw') {
         throw new Error('Could not resolve the styleName \'' + styleName + '\'.');
       }
+
       if (handleMissingStyleName === 'warn') {
         // eslint-disable-next-line no-console
         console.warn('Could not resolve the styleName \'' + styleName + '\'.');
@@ -92,5 +91,7 @@ exports.default = function (styleNameValue, styleModuleImportMap, options) {
     return className;
   }).join(' ');
 };
+
+exports.default = _default;
 
 //# sourceMappingURL=getClassName.js.map

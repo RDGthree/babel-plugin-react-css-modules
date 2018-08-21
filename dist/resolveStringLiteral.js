@@ -1,36 +1,32 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = void 0;
 
-var _babelTypes = require('babel-types');
+var _types = require("@babel/types");
 
-var _conditionalClassMerge = require('./conditionalClassMerge');
+var _conditionalClassMerge = _interopRequireDefault(require("./conditionalClassMerge"));
 
-var _conditionalClassMerge2 = _interopRequireDefault(_conditionalClassMerge);
-
-var _getClassName = require('./getClassName');
-
-var _getClassName2 = _interopRequireDefault(_getClassName);
+var _getClassName = _interopRequireDefault(require("./getClassName"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  * Updates the className value of a JSX element using a provided styleName attribute.
  */
-exports.default = (path, styleModuleImportMap, styleNameAttribute, options) => {
+var _default = (path, styleModuleImportMap, styleNameAttribute, options) => {
   const classNameAttribute = path.node.openingElement.attributes.find(attribute => {
     return typeof attribute.name !== 'undefined' && attribute.name.name === 'className';
   });
-
-  const resolvedStyleName = (0, _getClassName2.default)(styleNameAttribute.value.value, styleModuleImportMap, options);
+  const resolvedStyleName = (0, _getClassName.default)(styleNameAttribute.value.value, styleModuleImportMap, options);
 
   if (classNameAttribute) {
-    if ((0, _babelTypes.isStringLiteral)(classNameAttribute.value)) {
+    if ((0, _types.isStringLiteral)(classNameAttribute.value)) {
       classNameAttribute.value.value += ' ' + resolvedStyleName;
-    } else if ((0, _babelTypes.isJSXExpressionContainer)(classNameAttribute.value)) {
-      classNameAttribute.value.expression = (0, _conditionalClassMerge2.default)(classNameAttribute.value.expression, (0, _babelTypes.stringLiteral)(resolvedStyleName));
+    } else if ((0, _types.isJSXExpressionContainer)(classNameAttribute.value)) {
+      classNameAttribute.value.expression = (0, _conditionalClassMerge.default)(classNameAttribute.value.expression, (0, _types.stringLiteral)(resolvedStyleName));
     } else {
       throw new Error('Unexpected attribute value.');
     }
@@ -41,4 +37,6 @@ exports.default = (path, styleModuleImportMap, styleNameAttribute, options) => {
     styleNameAttribute.value.value = resolvedStyleName;
   }
 };
+
+exports.default = _default;
 //# sourceMappingURL=resolveStringLiteral.js.map
