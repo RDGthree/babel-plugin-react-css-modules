@@ -34,7 +34,7 @@ type OptionsType = {|
   context?: string,
   filetypes: FiletypesConfigurationType,
   generateScopedName?: GenerateScopedNameConfigurationType,
-  includePaths?: $ReadOnlyArray
+  includePaths?: $ReadOnlyArray<string>
 |};
 
 const getFiletypeOptions = (cssSourceFilePath: string, filetypes: FiletypesConfigurationType): ?FiletypeOptionsType => {
@@ -73,7 +73,7 @@ const getExtraPlugins = (filetypeOptions: ?FiletypeOptionsType): $ReadOnlyArray<
   });
 };
 
-const getTokens = (runner, cssSourceFilePath: string, filetypeOptions: ?FiletypeOptionsType, includePaths?: Array<string>): StyleModuleMapType => {
+const getTokens = (runner, cssSourceFilePath: string, filetypeOptions: ?FiletypeOptionsType, includePaths?: $ReadOnlyArray<string>): StyleModuleMapType => {
   const extension = cssSourceFilePath.substr(cssSourceFilePath.lastIndexOf('.'));
   // eslint-disable-next-line flowtype/no-weak-types
   const options: Object = {

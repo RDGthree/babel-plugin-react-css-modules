@@ -11,7 +11,7 @@ type InputObjectType = {
 /**
  * Creates an AST representation of an InputObjectType shape object.
  */
-const createObjectExpression = (type: BabelTypes, object: InputObjectType): ObjectExpression => {
+const createObjectExpression = (t: BabelTypes, object: InputObjectType): ObjectExpression => {
   const properties = [];
 
   for (const name of Object.keys(object)) {
@@ -20,12 +20,12 @@ const createObjectExpression = (type: BabelTypes, object: InputObjectType): Obje
     let newValue;
 
     // eslint-disable-next-line no-empty
-    if (type.isAnyTypeAnnotation(value)) {
+    if (t.isAnyTypeAnnotation(value)) {
 
     } else if (typeof value === 'string') {
-      newValue = type.stringLiteral(value);
+      newValue = t.stringLiteral(value);
     } else if (typeof value === 'object') {
-      newValue = createObjectExpression(type, value);
+      newValue = createObjectExpression(t, value);
     } else if (typeof value === 'boolean') {
       newValue = t.booleanLiteral(value);
     } else if (typeof value === 'undefined') {
@@ -36,14 +36,14 @@ const createObjectExpression = (type: BabelTypes, object: InputObjectType): Obje
     }
 
     properties.push(
-      type.objectProperty(
-        type.stringLiteral(name),
+      t.objectProperty(
+        t.stringLiteral(name),
         newValue
       )
     );
   }
 
-  return type.objectExpression(properties);
+  return t.objectExpression(properties);
 };
 
 export default createObjectExpression;
