@@ -1,1 +1,0 @@
-{"version":3,"sources":["../../src/schemas/optionsDefaults.js"],"names":["optionsDefaults","handleMissingStyleName"],"mappings":";;;;;;AAAA,MAAMA,eAAe,GAAG;AACtBC,EAAAA,sBAAsB,EAAE;AADF,CAAxB;eAIeD,e","sourcesContent":["const optionsDefaults = {\n  handleMissingStyleName: 'throw'\n};\n\nexport default optionsDefaults;\n"],"file":"optionsDefaults.js"}

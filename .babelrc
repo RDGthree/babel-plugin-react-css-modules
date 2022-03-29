@@ -1,15 +1,16 @@
 {
   "plugins": [
-    "@babel/plugin-transform-flow-strip-types"
+    "@babel/plugin-transform-typescript"
   ],
   "presets": [
     [
       "@babel/env",
       {
         "targets": {
-          "node": "8.0"
+          "node": "current"
         }
-      }
+      },
+      "@babel/preset-typescript"
     ]
   ]
 }

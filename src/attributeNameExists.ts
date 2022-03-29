@@ -1,10 +1,7 @@
-// @flow
+import optionsDefaults from "./schemas/optionsDefaults";
 
-import optionsDefaults from './schemas/optionsDefaults';
-
-const attributeNameExists = (programPath: *, stats: *): boolean => {
+const attributeNameExists = (programPath: any, stats: any): boolean => {
   let exists = false;
-
   let attributeNames = optionsDefaults.attributeNames;
 
   if (stats.opts && stats.opts.attributeNames) {
@@ -12,7 +9,7 @@ const attributeNameExists = (programPath: *, stats: *): boolean => {
   }
 
   programPath.traverse({
-    JSXAttribute (attrPath: *) {
+    JSXAttribute(attrPath: any) {
       if (exists) {
         return;
       }
@@ -23,8 +20,8 @@ const attributeNameExists = (programPath: *, stats: *): boolean => {
         exists = true;
       }
     }
-  });
 
+  });
   return exists;
 };
 

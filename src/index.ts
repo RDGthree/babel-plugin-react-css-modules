@@ -1,13 +1,11 @@
-// @flow
-
 import {
   dirname,
   resolve
 } from 'path';
 import babelPluginJsxSyntax from '@babel/plugin-syntax-jsx';
-import BabelTypes from '@babel/types';
 import ajvKeywords from 'ajv-keywords';
 import Ajv from 'ajv';
+
 import optionsSchema from './schemas/optionsSchema.json';
 import optionsDefaults from './schemas/optionsDefaults';
 import createObjectExpression from './createObjectExpression';
@@ -30,7 +28,7 @@ const validate = ajv.compile(optionsSchema);
 export default ({
   types: t
 }: {
-  types: BabelTypes
+  types: any;
 }) => {
   const filenameMap = {};
 
@@ -116,7 +114,7 @@ export default ({
     }
   };
 
-  const getTargetResourcePath = (path: *, stats: *) => {
+  const getTargetResourcePath = (path: any, stats: any) => {
     const targetFileDirectoryPath = dirname(stats.file.opts.filename);
 
     if (path.node.source.value.startsWith('.')) {
@@ -130,7 +128,7 @@ export default ({
     return filename.match(new RegExp(exclude));
   };
 
-  const notForPlugin = (path: *, stats: *) => {
+  const notForPlugin = (path: any, stats: any) => {
     stats.opts.filetypes = stats.opts.filetypes || {};
 
     const extension = path.node.source.value.lastIndexOf('.') > -1 ? path.node.source.value.substr(path.node.source.value.lastIndexOf('.')) : null;
@@ -151,7 +149,7 @@ export default ({
   return {
     inherits: babelPluginJsxSyntax,
     visitor: {
-      ImportDeclaration (path: *, stats: *): void {
+      ImportDeclaration (path: any, stats: any): void {
         if (skip || notForPlugin(path, stats)) {
           return;
         }
@@ -188,7 +186,7 @@ export default ({
           path.remove();
         }
       },
-      JSXElement (path: *, stats: *): void {
+      JSXElement (path: any, stats: any): void {
         if (skip) {
           return;
         }
@@ -261,7 +259,7 @@ export default ({
           }
         }
       },
-      Program (path: *, stats: *): void {
+      Program (path: any, stats: any): void {
         if (!validate(stats.opts)) {
           // eslint-disable-next-line no-console
           console.error(validate.errors);

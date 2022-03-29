@@ -1,4 +1,4 @@
-const optionsDefaults = {
+const optionsDefaults: any = {
   attributeNames: {
     styleName: 'className'
   },

@@ -1,3 +1,7 @@
-import runner from '@babel/helper-plugin-test-runner';
+import runner from "@babel/helper-plugin-test-runner";
 
-runner(__dirname);
+try {
+  await runner(__dirname);
+} catch (err) {
+
+}
