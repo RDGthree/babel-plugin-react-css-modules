@@ -2,6 +2,7 @@ import {
   dirname,
   resolve
 } from 'path';
+import * as BabelTypes from '@babel/types';
 import babelPluginJsxSyntax from '@babel/plugin-syntax-jsx';
 import ajvKeywords from 'ajv-keywords';
 import Ajv from 'ajv';
@@ -28,7 +29,7 @@ const validate = ajv.compile(optionsSchema);
 export default ({
   types: t
 }: {
-  types: any;
+  types: typeof BabelTypes;
 }) => {
   const filenameMap = {};
 

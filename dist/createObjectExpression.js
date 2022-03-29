@@ -1,17 +1,20 @@
-import * as BabelTypes from '@babel/types';
-type InputObjectType = Record<string, any>;
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
 
 /**
  * Creates an AST representation of an InputObjectType shape object.
  */
-const createObjectExpression = (t: typeof BabelTypes, object: InputObjectType): BabelTypes.ObjectExpression => {
+const createObjectExpression = (t, object) => {
   const properties = [];
 
   for (const name of Object.keys(object)) {
     const value = object[name];
-    let newValue;
+    let newValue; // eslint-disable-next-line no-empty
 
-    // eslint-disable-next-line no-empty
     if (t.isAnyTypeAnnotation(value)) {} else if (typeof value === 'string') {
       newValue = t.stringLiteral(value);
     } else if (typeof value === 'object') {
@@ -31,4 +34,6 @@ const createObjectExpression = (t: typeof BabelTypes, object: InputObjectType): 
   return t.objectExpression(properties);
 };
 
-export default createObjectExpression;
+var _default = createObjectExpression;
+exports.default = _default;
+//# sourceMappingURL=createObjectExpression.js.map
